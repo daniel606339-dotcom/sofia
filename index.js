@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
-const N8N_WEBHOOK_URL = 'https://oenciso.app.n8n.cloud/webhook/whatsapp'; // pegá la URL que copiaste
 app.use(express.json());
 
-const VERIFY_TOKEN = 'probo123'; // dejá el mismo que tenés
-const WHATSAPP_TOKEN = 'EAANZBUe4D0PABRf1d8hV3Ds5eLCvBitRbsSdu7FAZBhCoald5WEUlujNnSuK7xhSaxFWeXZBtx5ZBAw0cMdgPQdmD81fRx3A6DZBKq5KScUhAOZBXBcUc2DiD7mB7wR37kuny5OZBPis1mpyBIQ7b3GJ9iPhpZClgFAmQBVhy1yRkHzdGCsVxIoM1xjH2ZAUD40zOLgZDZD'; // el token de Meta
+const N8N_WEBHOOK_URL = 'https://oenciso.app.n8n.cloud/webhook/whatsapp';
+const VERIFY_TOKEN = 'probo123';
+const WHATSAPP_TOKEN = 'EAANZBUe4D0PABRf1d8hV3Ds5eLCvBitRbsSdu7FAZBhCoald5WEUlujNnSuK7xhSaxFWeXZBtx5ZBAw0cMdgPQdmD81fRx3A6DZBKq5KScUhAOZBXBcUc2DiD7mB7wR37kuny5OZBPis1mpyBIQ7b3GJ9iPhpZClgFAmQBVhy1yRkHzdGCsVxIoM1xjH2ZAUD40zOLgZDZD';
 const PHONE_NUMBER_ID = '993471470525797';
 
 app.get('/webhook', (req, res) => {
@@ -20,27 +20,23 @@ app.get('/webhook', (req, res) => {
 
 app.post('/webhook', async (req, res) => {
     const body = req.body;
-    res.sendStatus(200); // responder rápido a Meta
+    res.sendStatus(200);
 
     try {
-    const changes = body.entry?.[0]?.changes?.[0]?.value;
-    const message = changes?.messages?.[0];
-    if (!message || message.type !== 'text') return;
+        const changes = body.entry?.[0]?.changes?.[0]?.value;
+        const message = changes?.messages?.[0];
+        if (!message || message.type !== 'text') return;
 
-    const from = message.from;
-    const text = message.text.body;
-    console.log(`Mensaje de ${from}: ${text}`);
+        const from = message.from;
+        const text = message.text.body;
+        console.log(`Mensaje de ${from}: ${text}`);
 
-    // Reenviar a N8N
-    await fetch(N8N_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from, text })
-    });
-
-} catch (err) {
-    console.error(err);
-}
+        // Reenviar a N8N
+        await fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ from, text })
+        });
 
         // Respuesta automática
         await fetch(`https://graph.facebook.com/v19.0/${PHONE_NUMBER_ID}/messages`, {
@@ -56,6 +52,7 @@ app.post('/webhook', async (req, res) => {
                 text: { body: `Hola! Recibimos tu mensaje: "${text}". Te responderemos pronto.` }
             })
         });
+
     } catch (err) {
         console.error(err);
     }
