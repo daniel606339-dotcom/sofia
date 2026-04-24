@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
-const N8N_WEBHOOK_URL = 'https://oenciso.app.n8n.cloud/webhook-test/whatsapp';
+const N8N_WEBHOOK_URL = 'https://oenciso.app.n8n.cloud/webhook/whatsapp';
 const VERIFY_TOKEN = 'probo123';
 const WHATSAPP_TOKEN = 'EAANZBUe4D0PABRf1d8hV3Ds5eLCvBitRbsSdu7FAZBhCoald5WEUlujNnSuK7xhSaxFWeXZBtx5ZBAw0cMdgPQdmD81fRx3A6DZBKq5KScUhAOZBXBcUc2DiD7mB7wR37kuny5OZBPis1mpyBIQ7b3GJ9iPhpZClgFAmQBVhy1yRkHzdGCsVxIoM1xjH2ZAUD40zOLgZDZD';
 const PHONE_NUMBER_ID = '993471470525797';
