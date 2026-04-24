@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const N8N_WEBHOOK_URL = 'https://oenciso.app.n8n.cloud/webhook/whatsapp'; // pegá la URL que copiaste
 app.use(express.json());
 
 const VERIFY_TOKEN = 'probo123'; // dejá el mismo que tenés
@@ -22,13 +23,24 @@ app.post('/webhook', async (req, res) => {
     res.sendStatus(200); // responder rápido a Meta
 
     try {
-        const changes = body.entry?.[0]?.changes?.[0]?.value;
-        const message = changes?.messages?.[0];
-        if (!message || message.type !== 'text') return;
+    const changes = body.entry?.[0]?.changes?.[0]?.value;
+    const message = changes?.messages?.[0];
+    if (!message || message.type !== 'text') return;
 
-        const from = message.from;
-        const text = message.text.body;
-        console.log(`Mensaje de ${from}: ${text}`);
+    const from = message.from;
+    const text = message.text.body;
+    console.log(`Mensaje de ${from}: ${text}`);
+
+    // Reenviar a N8N
+    await fetch(N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from, text })
+    });
+
+} catch (err) {
+    console.error(err);
+}
 
         // Respuesta automática
         await fetch(`https://graph.facebook.com/v19.0/${PHONE_NUMBER_ID}/messages`, {
