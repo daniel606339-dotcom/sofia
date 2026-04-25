@@ -38,21 +38,7 @@ app.post('/webhook', async (req, res) => {
             body: JSON.stringify({ from, text })
         });
 
-        // Respuesta automática
-        await fetch(`https://graph.facebook.com/v19.0/${PHONE_NUMBER_ID}/messages`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${WHATSAPP_TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                messaging_product: 'whatsapp',
-                to: from,
-                type: 'text',
-                text: { body: `Hola! Recibimos tu mensaje: "${text}". Te responderemos pronto.` }
-            })
-        });
-
+  
     } catch (err) {
         console.error(err);
     }
