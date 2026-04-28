@@ -6,7 +6,7 @@ const N8N_WEBHOOK_URL = 'https://oenciso.app.n8n.cloud/webhook/whatsapp';
 const VERIFY_TOKEN = 'probo123';
 
 app.get('/webhook', (req, res) => {
-    const mode      = req.query['hub.mode'];
+    const mode      = req.query['hub.mode'];    
     const token     = req.query['hub.verify_token'];
     const challenge = req.query['hub.challenge'];
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {
@@ -24,6 +24,8 @@ app.post('/webhook', async (req, res) => {
         const changes = body.entry?.[0]?.changes?.[0]?.value;
         const message = changes?.messages?.[0];
         if (!message) return;
+        console.log('MESSAGE TYPE:', message.type);
+        console.log('MESSAGE FULL:', JSON.stringify(message));
 
         const from = message.from;
         let text = '';
